@@ -7,7 +7,6 @@ which writes quote requests to MongoDB.
 
 ```sh
 npm install
-cp .dev.vars.example .dev.vars   # then fill in MONGODB_URI
 npm run db:setup                 # one-off: create the collection indexes
 npm run dev                      # http://localhost:5173
 npm run check                    # svelte-check + tsc
