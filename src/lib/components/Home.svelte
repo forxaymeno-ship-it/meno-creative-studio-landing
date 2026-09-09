@@ -28,23 +28,23 @@
 	const workHref = $derived(`${home}#work`);
 </script>
 
-<Seo {content} {locale} path="/" />
+<Seo {content} {locale} path="/"/>
 
 <a class="skip-link" href="#main">{content.nav.skipToContent}</a>
-<Header {content} {locale} {path} />
+<Header {content} {locale} {path}/>
 
 <main id="main">
-	<Hero {content} {workHref} />
-	<BrandStrip {content} />
-	<WorkShowcase {content} {locale} />
-	<Services {content} />
-	<ValueProp {content} />
-	<CraftTimeline {content} />
-	<Process {content} />
-	<EcommerceSection {content} />
-	<Engagement {content} />
-	<FAQ {content} />
-	<FinalCTA {content} />
+	<Hero {content} {workHref}/>
+	<BrandStrip {content}/>
+	<WorkShowcase {content} {locale}/>
+	<Services {content}/>
+	<ValueProp {content}/>
+	<CraftTimeline {content}/>
+	<Process {content}/>
+	<EcommerceSection {content}/>
+	<Engagement {content}/>
+	<FAQ {content}/>
+	<FinalCTA {content}/>
 </main>
 
 <Footer {content} {locale} {path} />
