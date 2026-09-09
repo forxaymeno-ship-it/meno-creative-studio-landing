@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<url>
+		<loc>https://meno.studio/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/"/>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/fr</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/"/>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/ar</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/"/>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/privacy</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/privacy"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/privacy"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/privacy"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/privacy"/>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/terms</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/terms"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/terms"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/terms"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/terms"/>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/fr/privacy</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/privacy"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/privacy"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/privacy"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/privacy"/>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/fr/terms</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/terms"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/terms"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/terms"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/terms"/>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/ar/privacy</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/privacy"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/privacy"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/privacy"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/privacy"/>
+		<priority>0.3</priority>
+	</url>
+	<url>
+		<loc>https://meno.studio/ar/terms</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://meno.studio/terms"/>
+		<xhtml:link rel="alternate" hreflang="fr" href="https://meno.studio/fr/terms"/>
+		<xhtml:link rel="alternate" hreflang="ar" href="https://meno.studio/ar/terms"/>
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://meno.studio/terms"/>
+		<priority>0.3</priority>
+	</url>
+</urlset>

@@ -1,0 +1,21 @@
+node_modules
+
+# Output
+.output
+.netlify
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+.idea
+
+# Env
+.env
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
