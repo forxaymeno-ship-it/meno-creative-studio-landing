@@ -4,7 +4,7 @@
 	import { SITE } from '$lib/data/site';
 	import { QUOTE_BUDGETS, QUOTE_FORM_NAME, QUOTE_NEEDS, QUOTE_VOLUMES } from '$lib/data/quote';
 	import { quote } from '$lib/state/quote.svelte';
-	import { isValidEmail, submitToNetlify, type SubmitState } from '$lib/utils/netlifyForm';
+	import { isValidEmail, submitQuoteForm, type SubmitState } from '$lib/utils/quoteForm';
 
 	let { content, locale }: { content: SiteContent; locale: Locale } = $props();
 
@@ -17,6 +17,7 @@
 	let step = $state(0);
 	let status = $state<SubmitState>('idle');
 	let errors = $state<Record<string, string>>({});
+	let rateLimited = $state(false);
 
 	const empty = () => ({
 		name: '',
@@ -68,6 +69,7 @@
 		step = 0;
 		status = 'idle';
 		errors = {};
+		rateLimited = false;
 	};
 
 	const toggleNeed = (id: string) => {
@@ -111,12 +113,25 @@
 		}
 	};
 
-	/**
-	 * Submissions always carry the English label so the studio inbox reads the
-	 * same whichever language the visitor filled the form in.
-	 */
-	const valueFor = (options: { id: string; label: Record<Locale, string> }[], id: string) =>
-		options.find((option) => option.id === id)?.label.en ?? id;
+	/** Server-side validation codes mapped back onto the localised messages. */
+	const MESSAGE: Record<string, () => string> = {
+		required: () => copy.required,
+		invalidEmail: () => copy.invalidEmail,
+		selectOne: () => copy.selectOne,
+		tooLong: () => copy.required
+	};
+
+	const STEP_OF: Record<string, number> = {
+		name: 0,
+		email: 0,
+		company: 0,
+		url: 0,
+		needs: 1,
+		volume: 2,
+		budget: 3,
+		brief: 4,
+		deadline: 4
+	};
 
 	const onSubmit = async (event: SubmitEvent) => {
 		event.preventDefault();
@@ -124,29 +139,34 @@
 		if (!validateStep(4)) return;
 
 		status = 'submitting';
-		try {
-			await submitToNetlify({
-				formName: QUOTE_FORM_NAME,
-				values: {
-					name: form.name,
-					email: form.email,
-					company: form.company,
-					url: form.url,
-					needs: form.needs.map((id) => valueFor(QUOTE_NEEDS, id)),
-					volume: form.volume ? valueFor(QUOTE_VOLUMES, form.volume) : '',
-					budget: form.budget ? valueFor(QUOTE_BUDGETS, form.budget) : '',
-					brief: form.brief,
-					deadline: form.deadline,
-					source: quote.source,
-					locale
-				}
-			});
+		rateLimited = false;
+
+		const result = await submitQuoteForm(event.currentTarget as HTMLFormElement);
+
+		if (result.ok) {
 			status = 'success';
 			form = empty();
-		} catch {
-			status = 'error';
+			return;
 		}
+
+		if (result.kind === 'invalid') {
+			errors = Object.fromEntries(
+				Object.entries(result.errors).map(([field, code]) => [
+					field,
+					(MESSAGE[code] ?? MESSAGE.required)()
+				])
+			);
+			const first = Math.min(...Object.keys(errors).map((field) => STEP_OF[field] ?? 4));
+			status = 'idle';
+			step = first;
+			focusStep();
+			return;
+		}
+
+		rateLimited = result.kind === 'rateLimited';
+		status = 'error';
 	};
+
 </script>
 
 <dialog
@@ -195,15 +215,12 @@
 		<form
 			name={QUOTE_FORM_NAME}
 			method="POST"
-			action="/"
-			data-netlify="true"
-			data-netlify-honeypot="bot-field"
+			action="/quote"
 			class="qd__form"
 			class:is-hidden={status === 'success'}
 			onsubmit={onSubmit}
 			novalidate
 		>
-			<input type="hidden" name="form-name" value={QUOTE_FORM_NAME} />
 			<input type="hidden" name="source" value={quote.source} />
 			<input type="hidden" name="locale" value={locale} />
 			<p class="qd__pot">
@@ -397,8 +414,10 @@
 				{#if status === 'error'}
 					<div class="qd__error" role="alert">
 						<strong>{copy.error.title}</strong>
-						<span>{copy.error.body}</span>
-						<a href="mailto:{SITE.email}">{SITE.email}</a>
+						<span>{rateLimited ? copy.error.tooMany : copy.error.body}</span>
+						{#if !rateLimited}
+							<a href="mailto:{SITE.email}">{SITE.email}</a>
+						{/if}
 					</div>
 				{/if}
 			</fieldset>

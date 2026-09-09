@@ -1,15 +1,19 @@
 # MENO — AI Creative Studio
 
-Static marketing site for MENO. SvelteKit 2 + Svelte 5 (runes) + TypeScript,
-prerendered with `@sveltejs/adapter-static`, deployed on Netlify.
-No backend, no API routes, no database. Quote requests go through Netlify Forms.
+Marketing site for MENO. SvelteKit 2 + Svelte 5 (runes) + TypeScript, deployed
+to Cloudflare Workers with `@sveltejs/adapter-cloudflare`. Every page is
+prerendered and served as a static asset; the only server route is `/quote`,
+which writes quote requests to MongoDB.
 
 ```sh
 npm install
-npm run dev      # http://localhost:5173
-npm run check    # svelte-check + tsc
-npm run build    # -> build/
-npm run preview  # serve the production build
+cp .dev.vars.example .dev.vars   # then fill in MONGODB_URI
+npm run db:setup                 # one-off: create the collection indexes
+npm run dev                      # http://localhost:5173
+npm run check                    # svelte-check + tsc
+npm run build                    # -> .svelte-kit/cloudflare/
+npm run preview                  # wrangler dev, with real bindings
+npm run deploy                   # build + wrangler deploy
 ```
 
 ---
@@ -67,39 +71,78 @@ changes with it.
 
 ---
 
-## Netlify
+## Deployment — Cloudflare Workers
 
-`netlify.toml` is already configured (`npm run build` → `build/`, plus security
-and cache headers).
-
-**Forms.** Netlify discovers forms by parsing the *prerendered* HTML at deploy
-time. The quote form is therefore always present in the DOM — the dialog is
-rendered closed, not conditionally created — and carries `data-netlify="true"`,
-a hidden `form-name` input and a `bot-field` honeypot. Submission is
-progressively enhanced: `src/lib/utils/netlifyForm.ts` intercepts the submit and
-POSTs URL-encoded data with `fetch`, so the visitor never leaves the page.
-Submissions land under **Forms → quote** in the Netlify dashboard.
-
-After the first deploy, verify the form was detected. If it wasn't, check that
-`build/index.html` still contains `data-netlify="true"`:
+`wrangler.jsonc` holds the whole deployment config: the built worker at
+`.svelte-kit/cloudflare/_worker.js`, the static assets binding, `nodejs_compat`
+(the MongoDB driver needs `node:net` and `node:tls`), and the rate limiter.
 
 ```sh
-npm run build && grep -c 'data-netlify="true"' build/index.html
+npx wrangler secret put MONGODB_URI
+npx wrangler secret put MONGODB_DB     # optional, defaults to "meno"
+npm run deploy
 ```
 
-**Locales.** The site prerenders `/`, `/fr` and `/ar` (plus legal pages for
-each). All three contain the same form named `quote`; Netlify treats them as one
-form. Option values are always submitted in English so the inbox reads
-consistently regardless of the visitor's language.
+Security and cache headers live in `_headers` at the project root (the adapter
+copies it into the build), which Cloudflare applies to the served assets.
+
+**Atlas network access.** Workers have no stable egress IP, so the Atlas
+project must allow `0.0.0.0/0`. Protect the cluster with a strong,
+least-privilege database user instead — the app only needs `insert` and
+`find` on `meno.quotes`.
+
+---
+
+## Quote requests → MongoDB
+
+The dialog posts to a SvelteKit form action at `/quote`
+(`src/routes/quote/+page.server.ts`), the one route that is not prerendered.
+
+| File | Role |
+| --- | --- |
+| `src/lib/server/mongo.ts` | Connection helper and the `QuoteDocument` shape. |
+| `src/lib/server/quote.ts` | Server-side validation, honeypot, rate limiting, insert. |
+| `src/lib/utils/quoteForm.ts` | Client-side enhancement — posts without navigating. |
+| `src/routes/quote/+page.svelte` | The no-JS result page. |
+| `scripts/init-db.mjs` | Creates the collection indexes. |
+
+**Connections are per request.** Cloudflare binds each socket to the request
+that opened it, so a cached `MongoClient` throws *"Cannot perform I/O on behalf
+of a different request"* on the second submission. `withDb()` therefore opens
+and closes a client inside the request. At a handful of leads a day the extra
+connect is not worth engineering around; if volume ever justifies it, move the
+client into a Durable Object.
+
+**Nothing from the browser is trusted.** Every field is re-validated and
+length-capped server-side, and the multi-select values are matched back against
+`src/lib/data/quote.ts`, so the collection only ever holds configured labels.
+Option labels are stored in English regardless of the visitor's locale, with
+the locale itself kept on the document.
+
+**Rate limiting** uses Cloudflare's `QUOTE_LIMITER` binding — 5 submissions per
+IP per minute. That binding does not exist under `vite dev`, so a second gate
+counts recent documents for the same IP and applies the same ceiling.
+
+**Failure is quiet.** The honeypot returns success so bots learn nothing; real
+errors log to the Worker and the visitor sees the studio email address.
+
+### Reading submissions
+
+```js
+db.quotes.find({ status: 'new' }).sort({ createdAt: -1 })
+```
+
+Documents carry `name`, `email`, `company`, `url`, `needs[]`, `volume`,
+`budget`, `brief`, `deadline`, `source`, `locale`, `status`, `createdAt` and a
+`meta` object (`ip`, `userAgent`, `referer`, `country`).
 
 ---
 
 ## Notes
 
-- `_legacy-template/` is the previous project this repo was forked from. It is
-  not built, not deployed and not referenced. Delete it when you're ready.
-- The site is fully prerendered; there are no `+server.ts` or `+page.server.ts`
-  files. `src/hooks.server.ts` runs at build time only, to stamp `lang`/`dir`
-  onto `<html>` for each locale.
+- Everything except `/quote` is prerendered. `src/hooks.server.ts` stamps
+  `lang`/`dir` onto `<html>` — at build time for the prerendered pages, at
+  request time for `/quote`.
+- `/quote` is `noindex` and disallowed in `robots.txt`; a GET redirects home.
 - Videos pause when they leave the viewport or the tab is hidden, and never
   autoplay under `prefers-reduced-motion`.

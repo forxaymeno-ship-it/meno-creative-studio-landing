@@ -375,6 +375,7 @@ export const fr: SiteContent = {
 		error: {
 			title: 'L’envoi a échoué',
 			body: 'Quelque chose s’est mal passé. Réessayez, ou écrivez-nous directement.',
+			tooMany: 'Cela fait plusieurs demandes d’affilée. Patientez une minute, puis réessayez.',
 			retry: 'Réessayer'
 		}
 	},

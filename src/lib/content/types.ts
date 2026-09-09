@@ -175,6 +175,7 @@ export interface SiteContent {
 		error: {
 			title: string;
 			body: string;
+			tooMany: string;
 			retry: string;
 		};
 	};

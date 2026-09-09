@@ -2,9 +2,11 @@ node_modules
 
 # Output
 .output
-.netlify
 /.svelte-kit
 /build
+
+# Cloudflare
+.wrangler
 
 # OS
 .DS_Store
@@ -14,7 +16,9 @@ Thumbs.db
 
 # Env
 .env
+.dev.vars
 !.env.example
+!.dev.vars.example
 
 # Vite
 vite.config.js.timestamp-*

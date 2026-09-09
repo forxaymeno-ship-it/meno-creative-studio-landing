@@ -375,6 +375,7 @@ export const en: SiteContent = {
 		error: {
 			title: 'That did not send',
 			body: 'Something went wrong on the way out. Try again, or email us directly.',
+			tooMany: 'That is a few requests in a row. Give it a minute, then try again.',
 			retry: 'Try again'
 		}
 	},

@@ -1,6 +1,6 @@
 import type { LocalizedText } from '$lib/i18n';
 
-/** Must match the form `name` attribute AND the Netlify form name. */
+/** The form's `name` attribute. */
 export const QUOTE_FORM_NAME = 'quote';
 
 export interface QuoteOption {
