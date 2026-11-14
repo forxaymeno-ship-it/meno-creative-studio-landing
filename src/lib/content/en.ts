@@ -401,6 +401,18 @@ export const en: SiteContent = {
 				{
 					h: 'Your rights',
 					p: 'Write to us and we will remove your data from our records on request.'
+				},
+				{
+					h: 'YouTube API Services',
+					p: 'The studio runs an internal tool, Meno Station Uploader, that uses YouTube API Services to upload and schedule videos on the studio’s own YouTube channel. It is not offered to the public. By using it you agree to be bound by the YouTube Terms of Service (https://www.youtube.com/t/terms), and Google’s handling of data is described in the Google Privacy Policy (https://policies.google.com/privacy).'
+				},
+				{
+					h: 'What the uploader accesses',
+					p: 'Only permission to upload videos and set their details (title, description, tags, thumbnail, visibility and publish time) on the authorised channel, plus the basic channel information needed to confirm which channel is authorised. It does not access or store viewer data, comments, analytics or any information about other YouTube users. Its access credential is stored privately, used for nothing else, and never sold or shared.'
+				},
+				{
+					h: 'Revoking access',
+					p: 'Access granted to the uploader can be revoked at any time from the Google security settings page (https://security.google.com/settings/security/permissions). Once revoked, the stored credential stops working and is deleted.'
 				}
 			]
 		},

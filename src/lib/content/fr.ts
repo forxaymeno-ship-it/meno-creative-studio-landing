@@ -401,6 +401,18 @@ export const fr: SiteContent = {
 				{
 					h: 'Vos droits',
 					p: 'Écrivez-nous et nous supprimons vos données de nos dossiers sur demande.'
+				},
+				{
+					h: 'Services d’API YouTube',
+					p: 'Le studio utilise un outil interne, Meno Station Uploader, qui s’appuie sur les services d’API YouTube pour mettre en ligne et programmer des vidéos sur la propre chaîne YouTube du studio. Il n’est pas proposé au public. En l’utilisant, vous acceptez les Conditions d’utilisation de YouTube (https://www.youtube.com/t/terms) ; le traitement des données par Google est décrit dans les Règles de confidentialité de Google (https://policies.google.com/privacy).'
+				},
+				{
+					h: 'Ce à quoi l’outil accède',
+					p: 'Uniquement l’autorisation de mettre en ligne des vidéos et de définir leurs informations (titre, description, tags, miniature, visibilité et heure de publication) sur la chaîne autorisée, ainsi que les informations de base nécessaires pour confirmer quelle chaîne est autorisée. Il n’accède à aucune donnée de spectateurs, aucun commentaire, aucune statistique ni aucune information sur d’autres utilisateurs de YouTube, et ne les conserve pas. Son identifiant d’accès est conservé de manière privée, n’est utilisé à aucune autre fin, et n’est jamais vendu ni partagé.'
+				},
+				{
+					h: 'Révoquer l’accès',
+					p: 'L’accès accordé à l’outil peut être révoqué à tout moment depuis la page des paramètres de sécurité Google (https://security.google.com/settings/security/permissions). Une fois révoqué, l’identifiant conservé cesse de fonctionner et est supprimé.'
 				}
 			]
 		},
